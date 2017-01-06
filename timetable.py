@@ -1,4 +1,4 @@
-# coding=utf-8
+﻿# coding=utf-8
 import requests
 import json
 ## Copyright (C) 2017 Leo Sheu. <loli>
@@ -34,6 +34,8 @@ url = 'https://140.134.4.38/3.0/getCoursesSchedule?api_key=83f1e4a91019fdf6ba17b
 
 getclass = requests.post(url , data = info, headers = header, verify = False)
 list = getclass.json()['data']
+for i in range(len(list)):
+    print(list[i])
 
 if(len(list)== 0):
     print(nid + ' 學號不存在OAO')
@@ -71,18 +73,28 @@ else:
             <tbody>
     ''')
 
-    i = 0
+    flag = 0
     for session in range(13):
         f.write(row[session%2])
         f.write(num[session])
         for day in range(1,6):
-            if (list[i]['period'] == session + 1):
-                if (list[i]['weekday'] == day):
-                    f.write('                    <td>' + list[i]['course'] + '<br>' + list[i]['classroom'] + '<br>' + list[i]['tname'] + '</td>\n')
-                    i = i+1
-                else:
-                    f.write('                    <td></td>\n')
-            else:
+            flag = 0
+            for i in range(len(list)):
+                if (list[i]['period'] == session + 1 and list[i]['weekday'] == day):
+                    f.write('                    <td>' + list[i]['course'] + '<br>')
+                    try:
+                        f.write(list[i]['classroom'] + '<br>')
+                    except:
+                        print('NO classroom')
+                    try:
+                        f.write(list[i]['tname'])
+                    except:
+                        print('NO tname')
+                    f.write('</td>\n')
+                    #f.write('                    <td>' + list[i]['course'] + '<br>' + list[i]['classroom'] + '<br>' + list[i]['tname'] + '</td>\n')
+                    flag = 1
+                    break
+            if (flag != 1):
                 f.write('                    <td></td>\n')
     
     f.write('                </tr>\n')
