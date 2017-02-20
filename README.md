@@ -1,2 +1,2 @@
-# auto-timetable-create
-FCU auto generate timetable
+# FCU_timetable_create
+auto generate timetable
